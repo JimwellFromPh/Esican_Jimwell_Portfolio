@@ -1,3 +1,12 @@
+
+<?php
+require_once __DIR__ . '/includes/db.php';
+
+// Get projects from the database
+$stmt = $pdo->query("SELECT * FROM projects ORDER BY id ASC");
+$projects = $stmt->fetchAll();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,8 +20,6 @@
 </head>
 
 <body>
-
-
 
     <header class="header">
 
@@ -31,15 +38,10 @@
             <div class="nav-links">
 
                 <a href="index.php">Home</a>
-
                 <a href="about.php">About</a>
-
                 <a href="skills.php">Skills</a>
-
                 <a href="projects.php">Projects</a>
-
                 <a href="resume.php">Resume</a>
-
                 <a href="contact.php">Contact</a>
 
                 <button
@@ -53,8 +55,6 @@
         </nav>
 
     </header>
-
-
 
     <main>
 
@@ -76,184 +76,53 @@
 
         </section>
 
-
         <section class="projects-section container">
 
+            <?php foreach ($projects as $project): ?>
 
+                <article class="project-card">
 
-            <article class="project-card">
+                    <?php if (!empty($project['image'])): ?>
 
-                <img
-                    src="assets/Letter Monsters.png"
-                    alt="Organizational Chart Project"
-                    class="project-photo">
+                        <img
+                            src="<?= htmlspecialchars($project['image'], ENT_QUOTES, 'UTF-8') ?>"
+                            alt="<?= htmlspecialchars($project['title'], ENT_QUOTES, 'UTF-8') ?>"
+                            class="project-photo">
 
-                <div class="project-content">
+                    <?php endif; ?>
 
-                    <h2>
-                        Letter Monsters
-                    </h2>
+                    <div class="project-content">
 
-                    <p>
-                        Letters Designed as Monsters. Letter F as Ferb from "Phineas and Ferb", and Letter"E"
-                        as a Stripe and Spots Purple Monster. 
-                    </p>
+                        <h2>
+                            <?= htmlspecialchars($project['title'], ENT_QUOTES, 'UTF-8') ?>
+                        </h2>
 
-                    <div class="project-tech">
+                        <p>
+                            <?= htmlspecialchars($project['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                        </p>
 
-                        <span>Adobe Illustrator</span>
+                        <?php if (!empty($project['link'])): ?>
 
-                        <span>Graphic Design</span>
+                            <a
+                                href="<?= htmlspecialchars($project['link'], ENT_QUOTES, 'UTF-8') ?>"
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                View Project
+                            </a>
 
-                    </div>
-
-                </div>
-
-            </article>
-
-
-
-            <article class="project-card">
-
-                <img
-                    src="assets/Polygonal animals.jpg"
-                    alt="Typography Project"
-                    class="project-photo">
-
-                <div class="project-content">
-
-                    <h2>
-                        Polygonal Animal
-                    </h2>
-
-                    <p>
-                        A design of a animal called "Wombat". This Design is made of Polygons.
-                    </p>
-
-                    <div class="project-tech">
-
-                        <span>Polygonal Design</span>
-
-                        <span>Adobe Illustrator</span>
-
-                        <span>Digital Design</span>
+                        <?php endif; ?>
 
                     </div>
 
-                </div>
+                </article>
 
-            </article>
+            <?php endforeach; ?>
 
+            <?php if (empty($projects)): ?>
 
+                <p>No projects have been added yet.</p>
 
-            <article class="project-card">
-
-                <img
-                    src="assets/logo.jpg"
-                    alt="Pixel Wave Logo"
-                    class="project-photo">
-
-                <div class="project-content">
-
-                    <h2>
-                        Vision Vault Logo
-                    </h2>
-
-                    <p>
-                        A logo design representing creativity
-                        and digital design. I used curved shapes
-                        and Text to create a calm and modern appearance.
-                    </p>
-
-                    <div class="project-tech">
-
-                        <span>Logo Design</span>
-
-                        <span>Adobe Photoshop</span>
-
-                        <span>Branding</span>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-
-            <article class="project-card">
-
-                <img
-                    src="assets/crunchies.png"
-                    alt="Crunchies Advertisement"
-                    class="project-photo">
-
-                <div class="project-content">
-
-                    <h2>
-                        Crunchies Advertisement
-                    </h2>
-
-                    <p>
-                        A promotional design created for a food
-                        product called Crunchies. The project
-                        focuses on making the product attractive
-                        and interesting to students and customers.
-                    </p>
-
-                    <div class="project-tech">
-
-                        <span>Advertisement</span>
-
-                        <span>Graphic Design</span>
-
-                        <span>Adobe Animate</span>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-
-            <article class="project-card">
-
-                <img
-                    src="assets/portfolio.png"
-                    alt="Personal Portfolio Website"
-                    class="project-photo">
-
-                <div class="project-content">
-
-                    <h2>
-                        Personal Portfolio Website
-                    </h2>
-
-                    <p>
-                        A personal portfolio website created to
-                        showcase my projects, skills, education,
-                        and experience. I designed the website
-                        with separate pages and added interactive
-                        features using JavaScript.
-                    </p>
-
-                    <div class="project-tech">
-
-                        <span>HTML</span>
-
-                        <span>CSS</span>
-
-                        <span>JavaScript</span>
-
-                        <span>Web Design</span>
-
-                    </div>
-
-                </div>
-
-            </article>
-
+            <?php endif; ?>
 
         </section>
 
@@ -263,12 +132,8 @@
         id="scrollTop"
         class="scroll-top"
         aria-label="Scroll to top">
-
         ↑
-
     </button>
-
-
 
     <footer class="footer">
 
@@ -278,7 +143,6 @@
         </p>
 
     </footer>
-
 
     <script src="js/script.js"></script>
 

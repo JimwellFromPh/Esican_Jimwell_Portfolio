@@ -1,3 +1,36 @@
+
+<?php
+require_once __DIR__ . '/includes/db.php';
+
+// Get all skills from the database
+$stmt = $pdo->query("SELECT * FROM skills ORDER BY id ASC");
+$skills = $stmt->fetchAll();
+
+// Assign an icon based on the skill category
+function getSkillIcon($category) {
+    $icons = [
+        'Web Development' => '🌐',
+        'Programming' => '💻',
+        'Database' => '🗄️',
+        'Graphic Design' => '🎨',
+        'Animation' => '🎬'
+    ];
+
+    return $icons[$category] ?? '⭐';
+}
+
+// Convert skill level into a label
+function getSkillLabel($level) {
+    if ($level >= 75) {
+        return 'Advanced';
+    } elseif ($level >= 50) {
+        return 'Intermediate';
+    } else {
+        return 'Beginner';
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +44,6 @@
 </head>
 
 <body>
-
 
     <header class="header">
 
@@ -30,15 +62,10 @@
             <div class="nav-links">
 
                 <a href="index.php">Home</a>
-
                 <a href="about.php">About</a>
-
                 <a href="skills.php">Skills</a>
-
                 <a href="projects.php">Projects</a>
-
                 <a href="resume.php">Resume</a>
-
                 <a href="contact.php">Contact</a>
 
                 <button
@@ -52,8 +79,6 @@
         </nav>
 
     </header>
-
-
 
     <main>
 
@@ -75,212 +100,57 @@
 
         </section>
 
-
         <section class="skills-section container">
 
-            <!-- HTML -->
+            <?php foreach ($skills as $skill): ?>
 
-            <article class="skill-card">
+                <article class="skill-card">
 
-                <div class="skill-icon">
-                    🌐
-                </div>
-
-                <h2>
-                    HTML
-                </h2>
-
-                <p>
-                    I use HTML to create the structure
-                    and content of websites.
-                </p>
-
-                <div class="skill-bar">
-
-                    <div
-                        class="skill-progress html-progress">
+                    <div class="skill-icon">
+                        <?= getSkillIcon($skill['category']) ?>
                     </div>
 
-                </div>
+                    <h2>
+                        <?= htmlspecialchars($skill['name'], ENT_QUOTES, 'UTF-8') ?>
+                    </h2>
 
-                <span class="skill-level">
-                    Beginner
-                </span>
+                    <p>
+                        <?= htmlspecialchars($skill['category'] ?? 'Skill', ENT_QUOTES, 'UTF-8') ?>
+                    </p>
 
-            </article>
+                    <div class="skill-bar">
 
+                        <div
+                            class="skill-progress"
+                            style="width: <?= max(0, min(100, (int)$skill['level'])) ?>%;">
+                        </div>
 
-            <!-- CSS -->
-
-            <article class="skill-card">
-
-                <div class="skill-icon">
-                    🎨
-                </div>
-
-                <h2>
-                    CSS
-                </h2>
-
-                <p>
-                    I use CSS to design websites,
-                    arrange layouts, and add colors
-                    and styles.
-                </p>
-
-                <div class="skill-bar">
-
-                    <div
-                        class="skill-progress css-progress">
                     </div>
 
-                </div>
+                    <span class="skill-level">
+                        <?= getSkillLabel((int)$skill['level']) ?>
+                    </span>
 
-                <span class="skill-level">
-                    Beginner
-                </span>
+                </article>
 
-            </article>
+            <?php endforeach; ?>
 
+            <?php if (empty($skills)): ?>
 
+                <p>No skills have been added yet.</p>
 
-            <article class="skill-card">
-
-                <div class="skill-icon">
-                    ⚡
-                </div>
-
-                <h2>
-                    JavaScript
-                </h2>
-
-                <p>
-                    I am learning JavaScript to add
-                    interactive features to websites.
-                </p>
-
-                <div class="skill-bar">
-
-                    <div
-                        class="skill-progress js-progress">
-                    </div>
-
-                </div>
-
-                <span class="skill-level">
-                    Beginner
-                </span>
-
-            </article>
-
-            <article class="skill-card">
-
-                <div class="skill-icon">
-                    🖼️
-                </div>
-
-                <h2>
-                    Adobe Photoshop
-                </h2>
-
-                <p>
-                    I use Photoshop to create posters,
-                    logos, typography designs, and
-                    other digital artwork.
-                </p>
-
-                <div class="skill-bar">
-
-                    <div
-                        class="skill-progress photoshop-progress">
-                    </div>
-
-                </div>
-
-                <span class="skill-level">
-                    Intermediate
-                </span>
-
-            </article>
-
-
-
-            <article class="skill-card">
-
-                <div class="skill-icon">
-                    ✏️
-                </div>
-
-                <h2>
-                    Graphic Design
-                </h2>
-
-                <p>
-                    I can create simple layouts, posters,
-                    logos, and other visual designs.
-                </p>
-
-                <div class="skill-bar">
-
-                    <div
-                        class="skill-progress design-progress">
-                    </div>
-
-                </div>
-
-                <span class="skill-level">
-                    Intermediate
-                </span>
-
-            </article>
-
-
-
-            <article class="skill-card">
-
-                <div class="skill-icon">
-                    🎬
-                </div>
-
-                <h2>
-                    Animation
-                </h2>
-
-                <p>
-                    I have practiced animation using
-                    Adobe Animate and learned basic
-                    animation techniques.
-                </p>
-
-                <div class="skill-bar">
-
-                    <div
-                        class="skill-progress animation-progress">
-                    </div>
-
-                </div>
-
-                <span class="skill-level">
-                    Beginner
-                </span>
-
-            </article>
+            <?php endif; ?>
 
         </section>
 
     </main>
 
-
-
     <button
         id="scrollTop"
         class="scroll-top"
         aria-label="Scroll to top">
-
         ↑
-
     </button>
-
 
     <footer class="footer">
 
@@ -290,8 +160,6 @@
         </p>
 
     </footer>
-
-
 
     <script src="js/script.js"></script>
 

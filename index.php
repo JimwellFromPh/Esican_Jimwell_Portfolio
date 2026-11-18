@@ -1,28 +1,36 @@
+
+<?php
+require_once __DIR__ . '/includes/db.php';
+
+$stmt = $pdo->query("SELECT * FROM profile LIMIT 1");
+$profile = $stmt->fetch();
+
+if (!$profile) {
+    die('Profile information not found.');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Portfolio | Home</title>
+    <title><?= htmlspecialchars($profile['full_name'], ENT_QUOTES, 'UTF-8') ?> | Home</title>
 
-    <!-- External CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-   
     <header class="header">
 
         <nav class="navbar container">
 
-            <!-- Logo -->
             <a href="index.php" class="logo">
                 Jim<span>well</span>
             </a>
 
-            <!-- Mobile Menu Button -->
             <button
                 class="menu-toggle"
                 aria-label="Open navigation"
@@ -30,17 +38,15 @@
                 ☰
             </button>
 
-            <!-- Navigation Links -->
             <div class="nav-links">
-                
-                 <a href="index.php">Home</a>
-                    <a href="about.php">About</a>
-                    <a href="skills.php">Skills</a>
-                    <a href="projects.php">Projects</a>
-                    <a href="resume.php">Resume</a>
-                    <a href="contact.php">Contact</a>v
 
-                <!-- Dark / Light Mode -->
+                <a href="index.php">Home</a>
+                <a href="about.php">About</a>
+                <a href="skills.php">Skills</a>
+                <a href="projects.php">Projects</a>
+                <a href="resume.php">Resume</a>
+                <a href="contact.php">Contact</a>
+
                 <button
                     class="theme-toggle"
                     aria-label="Toggle dark mode">
@@ -53,16 +59,10 @@
 
     </header>
 
-
-    <!-- =========================
-         MAIN CONTENT
-    ========================== -->
     <main>
 
-        <!-- HERO SECTION -->
         <section class="hero container">
 
-            <!-- Introduction -->
             <div class="hero-text">
 
                 <p class="eyebrow">
@@ -70,35 +70,27 @@
                 </p>
 
                 <h1>
-                    JIMWELL ESICAN
+                    <?= htmlspecialchars($profile['full_name'], ENT_QUOTES, 'UTF-8') ?>
                 </h1>
 
                 <h2>
                     I am a
                     <span id="typing-text">
-                        NORSU Student
+                        <?= htmlspecialchars($profile['headline'], ENT_QUOTES, 'UTF-8') ?>
                     </span>
                 </h2>
 
                 <p>
-                    I create clean designs, simple websites,
-                    and digital projects while learning more
-                    about technology and creative design.
+                    <?= htmlspecialchars($profile['introduction'], ENT_QUOTES, 'UTF-8') ?>
                 </p>
 
-
-                <!-- Buttons -->
                 <div class="hero-buttons">
 
-                    <a
-                        href="projects.php"
-                        class="btn primary">
+                    <a href="projects.php" class="btn primary">
                         View My Work
                     </a>
 
-                    <a
-                        href="contact.php"
-                        class="btn secondary">
+                    <a href="contact.php" class="btn secondary">
                         Contact Me
                     </a>
 
@@ -106,29 +98,24 @@
 
             </div>
 
-
-            <!-- PROFILE -->
             <div class="profile-card">
 
-          <img
-             src="assets/profilepic.jpg"
-            alt="My Profile Picture"
-            class="profile-image">
+                <img
+                    src="<?= htmlspecialchars($profile['profile_image'], ENT_QUOTES, 'UTF-8') ?>"
+                    alt="My Profile Picture"
+                    class="profile-image">
 
-           <p>
-             Creative Student
-           </p>
+                <p>
+                    Creative Student
+                </p>
 
-           <span>
-             HTML • CSS • JavaScript
-           </span>
-
-           </div>
+                <span>
+                    HTML • CSS • JavaScript
+                </span>
 
             </div>
 
         </section>
-
 
         <section class="quick-section">
 
@@ -146,12 +133,8 @@
 
                 </div>
 
-
-                <!-- Information Cards -->
                 <div class="info-grid">
 
-
-                    <!-- CARD 1 -->
                     <article class="info-card">
 
                         <div class="icon">
@@ -169,8 +152,6 @@
 
                     </article>
 
-
-                    <!-- CARD 2 -->
                     <article class="info-card">
 
                         <div class="icon">
@@ -188,8 +169,6 @@
 
                     </article>
 
-
-                    <!-- CARD 3 -->
                     <article class="info-card">
 
                         <div class="icon">
@@ -207,7 +186,6 @@
 
                     </article>
 
-
                 </div>
 
             </div>
@@ -216,20 +194,12 @@
 
     </main>
 
-
-   
-
     <button
         id="scrollTop"
         class="scroll-top"
         aria-label="Scroll to top">
-
         ↑
-
     </button>
-
-
-
 
     <footer class="footer">
 
@@ -239,11 +209,6 @@
         </p>
 
     </footer>
-
-
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
 
     <script src="js/script.js"></script>
 

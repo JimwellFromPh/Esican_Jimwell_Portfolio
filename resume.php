@@ -1,3 +1,20 @@
+
+<?php
+require_once __DIR__ . '/includes/db.php';
+
+// Get education records
+$educationStmt = $pdo->query("SELECT * FROM education ORDER BY id ASC");
+$education = $educationStmt->fetchAll();
+
+// Get experience records
+$experienceStmt = $pdo->query("SELECT * FROM experience ORDER BY id ASC");
+$experiences = $experienceStmt->fetchAll();
+
+// Get achievement records
+$achievementStmt = $pdo->query("SELECT * FROM achievements ORDER BY id ASC");
+$achievements = $achievementStmt->fetchAll();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +24,6 @@
 
     <title>My Portfolio | Resume</title>
 
-    <!-- External CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -30,15 +46,10 @@
             <div class="nav-links">
 
                 <a href="index.php">Home</a>
-
                 <a href="about.php">About</a>
-
                 <a href="skills.php">Skills</a>
-
                 <a href="projects.php">Projects</a>
-
                 <a href="resume.php">Resume</a>
-
                 <a href="contact.php">Contact</a>
 
                 <button
@@ -53,10 +64,7 @@
 
     </header>
 
-
-
     <main>
-
 
         <section class="page-header container">
 
@@ -75,186 +83,94 @@
 
         </section>
 
-
         <section class="resume-section container">
 
+            <!-- Education -->
+
+            <?php foreach ($education as $item): ?>
+
+                <article class="resume-card">
+
+                    <p class="resume-date">
+                        <?= htmlspecialchars($item['start_year'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                        –
+                        <?= htmlspecialchars($item['end_year'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                    </p>
+
+                    <h2>
+                        <?= htmlspecialchars($item['school'], ENT_QUOTES, 'UTF-8') ?>
+                    </h2>
+
+                    <h3>
+                        <?= htmlspecialchars($item['degree'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                    </h3>
+
+                    <p>
+                        <?= htmlspecialchars($item['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                    </p>
+
+                </article>
+
+            <?php endforeach; ?>
 
 
-            <article class="resume-card">
+            <!-- Experience -->
 
-                <p class="resume-date">
-                    2024 – Present
-                </p>
+            <?php foreach ($experiences as $item): ?>
 
-                <h2>
-                    College Education
-                </h2>
+                <article class="resume-card">
 
-                <h3>
-                    Bachelor of Science in Information Technology
-                </h3>
+                    <p class="resume-date">
+                        <?= htmlspecialchars($item['start_date'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                        –
+                        <?= htmlspecialchars($item['end_date'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                    </p>
 
-                <p>
-                    Currently studying as a Third Year Information Technology Student
-                    at Negros Oriental State University - Bayawan Sta.Catalina Campus (NORSU - BSC).
-                </p>
+                    <h2>
+                        <?= htmlspecialchars($item['position'], ENT_QUOTES, 'UTF-8') ?>
+                    </h2>
 
-            </article>
+                    <h3>
+                        <?= htmlspecialchars($item['company'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                    </h3>
 
+                    <p>
+                        <?= htmlspecialchars($item['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                    </p>
 
+                </article>
 
-            <article class="resume-card">
-
-                <p class="resume-date">
-                    Academic Projects
-                </p>
-
-                <h2>
-                    School Projects
-                </h2>
-
-                <h3>
-                    Graphic Design & Digital Media
-                </h3>
-
-                <p>
-                    Created posters, typography designs, logos,
-                    and other digital projects using design software.
-                </p>
-
-                <h3>
-                    Web Development
-                </h3>
-
-                <p>
-                    Created practice websites using HTML, CSS,
-                    and JavaScript while learning responsive
-                    web development.
-                </p>
-
-            </article>
+            <?php endforeach; ?>
 
 
+            <!-- Achievements and Training -->
 
-            <article class="resume-card">
+            <?php foreach ($achievements as $item): ?>
 
-                <p class="resume-date">
-                    Academic Experience
-                </p>
+                <article class="resume-card">
 
-                <h2>
-                    Graphic Design & Digital Design
-                </h2>
+                    <p class="resume-date">
+                        <?= htmlspecialchars($item['date_received'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                    </p>
 
-                <h3>
-                    Design Projects
-                </h3>
+                    <h2>
+                        <?= htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8') ?>
+                    </h2>
 
-                <p>
-                    Worked on different school design activities
-                    involving typography, logos, posters, layouts,
-                    colors, and visual composition.
-                </p>
+                    <h3>
+                        <?= htmlspecialchars($item['issuer'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                    </h3>
 
-                <h3>
-                    Design Tools
-                </h3>
+                    <p>
+                        <?= htmlspecialchars($item['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                    </p>
 
-                <p>
-                    Used Adobe Photoshop and other digital design
-                    tools to create and edit visual projects.
-                </p>
+                </article>
 
-            </article>
+            <?php endforeach; ?>
 
 
-
-            <article class="resume-card">
-
-                <p class="resume-date">
-                    Academic Activity
-                </p>
-
-                <h2>
-                    Animation
-                </h2>
-
-                <h3>
-                    Adobe Animate
-                </h3>
-
-                <p>
-                    Practiced animation techniques such as
-                    classic tween and motion tween. Learned how
-                    timing, movement, and planning are important
-                    when creating animations.
-                </p>
-
-            </article>
-
-
-
-            <article class="resume-card">
-
-                <p class="resume-date">
-                    Current Learning
-                </p>
-
-                <h2>
-                    Web Development
-                </h2>
-
-                <h3>
-                    HTML, CSS & JavaScript
-                </h3>
-
-                <p>
-                    Building websites using HTML for structure,
-                    CSS for design, and JavaScript for interactive
-                    features.
-                </p>
-
-                <div class="project-tech">
-
-                    <span>HTML</span>
-
-                    <span>CSS</span>
-
-                    <span>JavaScript</span>
-
-                    <span>Responsive Design</span>
-
-                </div>
-
-            </article>
-
-
- 
-
-            <article class="resume-card">
-
-                <p class="resume-date">
-                    Training & Development
-                </p>
-
-                <h2>
-                    Training / Certifications
-                </h2>
-
-                <h3>
-                    Continuous Learning
-                </h3>
-
-                <p>
-                    Currently developing my skills through school
-                    activities, practical projects, online learning,
-                    and hands-on practice.
-                </p>
-
-            </article>
-
-
-     
+            <!-- Career Goals -->
 
             <article class="resume-card">
 
@@ -275,21 +191,16 @@
 
             </article>
 
-
         </section>
 
     </main>
-
 
     <button
         id="scrollTop"
         class="scroll-top"
         aria-label="Scroll to top">
-
         ↑
-
     </button>
-
 
     <footer class="footer">
 
@@ -299,8 +210,6 @@
         </p>
 
     </footer>
-
-
 
     <script src="js/script.js"></script>
 

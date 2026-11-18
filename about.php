@@ -1,3 +1,15 @@
+
+<?php
+require_once __DIR__ . '/includes/db.php';
+
+$stmt = $pdo->query("SELECT * FROM profile LIMIT 1");
+$profile = $stmt->fetch();
+
+if (!$profile) {
+    die('Profile information not found.');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,14 +17,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Portfolio | About</title>
+    <title><?= htmlspecialchars($profile['full_name'], ENT_QUOTES, 'UTF-8') ?> | About</title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-
-
 
     <header class="header">
 
@@ -31,15 +41,10 @@
             <div class="nav-links">
 
                 <a href="index.php">Home</a>
-
                 <a href="about.php">About</a>
-
                 <a href="skills.php">Skills</a>
-
                 <a href="projects.php">Projects</a>
-
                 <a href="resume.php">Resume</a>
-
                 <a href="contact.php">Contact</a>
 
                 <button
@@ -53,8 +58,6 @@
         </nav>
 
     </header>
-
-
 
     <main>
 
@@ -75,10 +78,7 @@
 
         </section>
 
-
         <section class="about-section container">
-
-            <!-- ABOUT INTRO -->
 
             <div class="about-card">
 
@@ -91,26 +91,10 @@
                 </h2>
 
                 <p>
-                    I am a student who is interested in
-                    technology, graphic design, and web
-                    development.
-                </p>
-
-                <p>
-                    I enjoy creating digital projects and
-                    learning new things about computers
-                    and technology.
-                </p>
-
-                <p>
-                    Through my school projects, I have
-                    gained experience in graphic design,
-                    animation, and website development.
+                    <?= nl2br(htmlspecialchars($profile['biography'], ENT_QUOTES, 'UTF-8')) ?>
                 </p>
 
             </div>
-
-
 
             <div class="about-card">
 
@@ -124,8 +108,7 @@
 
                 <p>
                     I am currently studying Information Technology and developing my skills in
-                    programming, web development, and
-                    digital design.
+                    programming, web development, and digital design.
                 </p>
 
                 <p>
@@ -136,8 +119,6 @@
                 </p>
 
             </div>
-
-
 
             <div class="about-card">
 
@@ -151,32 +132,15 @@
 
                 <ul class="interest-list">
 
-                    <li>
-                        💻 Web Development
-                    </li>
-
-                    <li>
-                        🎨 Graphic Design
-                    </li>
-
-                    <li>
-                        🎬 Animation
-                    </li>
-
-                    <li>
-                        🖥️ Technology
-                    </li>
-
-                    <li>
-                        ✏️ Digital Art
-                    </li>
+                    <li>💻 Web Development</li>
+                    <li>🎨 Graphic Design</li>
+                    <li>🎬 Animation</li>
+                    <li>🖥️ Technology</li>
+                    <li>✏️ Digital Art</li>
 
                 </ul>
 
             </div>
-
-
-            <!-- GOALS -->
 
             <div class="about-card">
 
@@ -204,8 +168,6 @@
 
         </section>
 
-
-
         <section class="about-statement">
 
             <div class="container">
@@ -232,15 +194,11 @@
 
     </main>
 
-
-
     <button
         id="scrollTop"
         class="scroll-top"
         aria-label="Scroll to top">
-
         ↑
-
     </button>
 
     <footer class="footer">
@@ -251,8 +209,6 @@
         </p>
 
     </footer>
-
-
 
     <script src="js/script.js"></script>
 
