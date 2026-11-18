@@ -31,15 +31,15 @@
 
                 <a href="index.php">Home</a>
 
-                <a href="about.html">About</a>
+                <a href="about.php">About</a>
 
-                <a href="skills.html">Skills</a>
+                <a href="skills.php">Skills</a>
 
-                <a href="projects.html">Projects</a>
+                <a href="projects.php">Projects</a>
 
-                <a href="resume.html">Resume</a>
+                <a href="resume.php">Resume</a>
 
-                <a href="contact.html">Contact</a>
+                <a href="contact.php">Contact</a>
 
                 <button
                     class="theme-toggle"

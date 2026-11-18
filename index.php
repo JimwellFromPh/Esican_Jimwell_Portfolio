@@ -91,13 +91,13 @@
                 <div class="hero-buttons">
 
                     <a
-                        href="projects.html"
+                        href="projects.php"
                         class="btn primary">
                         View My Work
                     </a>
 
                     <a
-                        href="contact.html"
+                        href="contact.php"
                         class="btn secondary">
                         Contact Me
                     </a>
