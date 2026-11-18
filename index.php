@@ -18,7 +18,7 @@
         <nav class="navbar container">
 
             <!-- Logo -->
-            <a href="index.html" class="logo">
+            <a href="index.php" class="logo">
                 Jim<span>well</span>
             </a>
 
@@ -32,18 +32,13 @@
 
             <!-- Navigation Links -->
             <div class="nav-links">
-
-                <a href="index.html">Home</a>
-
-                <a href="about.html">About</a>
-
-                <a href="skills.html">Skills</a>
-
-                <a href="projects.html">Projects</a>
-
-                <a href="resume.html">Resume</a>
-
-                <a href="contact.html">Contact</a>
+                
+                 <a href="index.php">Home</a>
+                    <a href="about.php">About</a>
+                    <a href="skills.php">Skills</a>
+                    <a href="projects.php">Projects</a>
+                    <a href="resume.php">Resume</a>
+                    <a href="contact.php">Contact</a>v
 
                 <!-- Dark / Light Mode -->
                 <button
