@@ -180,6 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if (isset($_GET['updated'])) {
     $success = 'Profile information updated successfully!';
+
     $stmt = $pdo->query("SELECT * FROM profile LIMIT 1");
     $profile = $stmt->fetch();
 }
@@ -195,212 +196,173 @@ if (isset($_GET['updated'])) {
     <title>Profile Management</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="admin.css">
 
-    <style>
-        .profile-admin {
-            max-width: 850px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-
-        .profile-admin form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .profile-admin input,
-        .profile-admin textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font: inherit;
-        }
-
-        .profile-admin textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .profile-admin label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-        .profile-admin button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            background: #222;
-            color: white;
-            cursor: pointer;
-        }
-
-        .profile-message {
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 6px;
-        }
-
-        .profile-success {
-            background: #e1f5e5;
-            color: #176b2c;
-        }
-
-        .profile-error {
-            background: #ffe5e5;
-            color: #a00000;
-        }
-
-        .profile-preview {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 50%;
-            display: block;
-            margin-bottom: 15px;
-        }
-    </style>
+    <script src="../js/script.js" defer></script>
 </head>
 
-<body>
+<body class="admin-body">
 
-    <main class="profile-admin">
+    <main class="admin-page profile-admin">
 
-        <h1>Profile Management</h1>
-        <p>Edit the personal information displayed on your portfolio.</p>
+        <div class="admin-header">
+            <div>
+                <h1>Profile Management</h1>
+                <p>Edit the personal information displayed on your portfolio.</p>
+            </div>
+
+            <div class="admin-header-actions">
+                <button type="button" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+            </div>
+        </div>
 
         <?php if ($success): ?>
-            <p class="profile-message profile-success">
+            <p class="admin-message admin-success">
                 <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
             </p>
         <?php endif; ?>
 
         <?php if ($error): ?>
-            <p class="profile-message profile-error">
+            <p class="admin-message admin-error">
                 <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
             </p>
         <?php endif; ?>
 
-        <form method="POST" action="profile.php" enctype="multipart/form-data">
+        <section class="admin-panel">
 
-            <input
-                type="hidden"
-                name="csrf_token"
-                value="<?= htmlspecialchars($_SESSION['profile_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+            <form method="POST" action="profile.php" enctype="multipart/form-data" class="admin-form">
 
-            <div>
-                <label>Current Profile Picture</label>
-
-                <img
-                    src="../<?= htmlspecialchars($profile['profile_image'] ?? 'assets/profilepic.jpg', ENT_QUOTES, 'UTF-8') ?>"
-                    alt="Profile Picture"
-                    class="profile-preview">
-            </div>
-
-            <div>
-                <label for="profile_image">Upload New Profile Picture</label>
                 <input
-                    type="file"
-                    id="profile_image"
-                    name="profile_image"
-                    accept=".jpg,.jpeg,.png,.webp">
-                <small>Allowed formats: JPG, PNG, WEBP. Maximum size: 2 MB.</small>
-            </div>
+                    type="hidden"
+                    name="csrf_token"
+                    value="<?= htmlspecialchars($_SESSION['profile_csrf'], ENT_QUOTES, 'UTF-8') ?>">
 
-            <div>
-                <label for="full_name">Full Name</label>
-                <input
-                    type="text"
-                    id="full_name"
-                    name="full_name"
-                    value="<?= htmlspecialchars($profile['full_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                    required>
-            </div>
+                <div class="admin-form-group">
+                    <label>Current Profile Picture</label>
 
-            <div>
-                <label for="headline">Headline</label>
-                <input
-                    type="text"
-                    id="headline"
-                    name="headline"
-                    value="<?= htmlspecialchars($profile['headline'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                    required>
-            </div>
+                    <img
+                        src="../<?= htmlspecialchars($profile['profile_image'] ?? 'assets/profilepic.jpg', ENT_QUOTES, 'UTF-8') ?>"
+                        alt="Profile Picture"
+                        class="profile-preview">
+                </div>
 
-            <div>
-                <label for="introduction">Introduction</label>
-                <textarea
-                    id="introduction"
-                    name="introduction"><?= htmlspecialchars($profile['introduction'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
-            </div>
+                <div class="admin-form-group">
+                    <label for="profile_image">Upload New Profile Picture</label>
 
-            <div>
-                <label for="biography">Biography</label>
-                <textarea
-                    id="biography"
-                    name="biography"><?= htmlspecialchars($profile['biography'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
-            </div>
+                    <input
+                        type="file"
+                        id="profile_image"
+                        name="profile_image"
+                        accept=".jpg,.jpeg,.png,.webp">
 
-            <div>
-                <label for="interests">My Interests</label>
-                <textarea
-                    id="interests"
-                    name="interests"
-                    placeholder="Enter your interests, one per line"><?= htmlspecialchars($profile['interests'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
-            </div>
+                    <small>Allowed formats: JPG, PNG, WEBP. Maximum size: 2 MB.</small>
+                </div>
 
-            <div>
-                <label for="goals">My Goals</label>
-                <textarea
-                    id="goals"
-                    name="goals"><?= htmlspecialchars($profile['goals'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
-            </div>
+                <div class="admin-form-group">
+                    <label for="full_name">Full Name</label>
 
-            <div>
-                <label for="journey">My Journey</label>
-                <textarea
-                    id="journey"
-                    name="journey"><?= htmlspecialchars($profile['journey'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
-            </div>
+                    <input
+                        type="text"
+                        id="full_name"
+                        name="full_name"
+                        value="<?= htmlspecialchars($profile['full_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                        required>
+                </div>
 
-            <div>
-                <label for="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value="<?= htmlspecialchars($profile['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-            </div>
+                <div class="admin-form-group">
+                    <label for="headline">Headline</label>
 
-            <div>
-                <label for="phone">Phone</label>
-                <input
-                    type="text"
-                    id="phone"
-                    name="phone"
-                    value="<?= htmlspecialchars($profile['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-            </div>
+                    <input
+                        type="text"
+                        id="headline"
+                        name="headline"
+                        value="<?= htmlspecialchars($profile['headline'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                        required>
+                </div>
 
-            <div>
-                <label for="location">Location</label>
-                <input
-                    type="text"
-                    id="location"
-                    name="location"
-                    value="<?= htmlspecialchars($profile['location'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-            </div>
+                <div class="admin-form-group">
+                    <label for="introduction">Introduction</label>
 
-            <button type="submit">Save Changes</button>
+                    <textarea
+                        id="introduction"
+                        name="introduction"><?= htmlspecialchars($profile['introduction'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                </div>
 
-        </form>
+                <div class="admin-form-group">
+                    <label for="biography">Biography</label>
 
-        <p style="margin-top: 25px;">
-            <a href="index.php">Back to Dashboard</a> |
+                    <textarea
+                        id="biography"
+                        name="biography"><?= htmlspecialchars($profile['biography'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="interests">My Interests</label>
+
+                    <textarea
+                        id="interests"
+                        name="interests"
+                        placeholder="Enter your interests, one per line"><?= htmlspecialchars($profile['interests'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="goals">My Goals</label>
+
+                    <textarea
+                        id="goals"
+                        name="goals"><?= htmlspecialchars($profile['goals'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="journey">My Journey</label>
+
+                    <textarea
+                        id="journey"
+                        name="journey"><?= htmlspecialchars($profile['journey'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="email">Email</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="<?= htmlspecialchars($profile['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="phone">Phone</label>
+
+                    <input
+                        type="text"
+                        id="phone"
+                        name="phone"
+                        value="<?= htmlspecialchars($profile['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="location">Location</label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        value="<?= htmlspecialchars($profile['location'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                </div>
+
+                <button type="submit" class="admin-submit-button">
+                    Save Changes
+                </button>
+
+            </form>
+
+        </section>
+
+        <div class="admin-footer-actions">
+            <a href="index.php">Back to Dashboard</a>
             <a href="../index.php" target="_blank">View Portfolio</a>
-        </p>
+        </div>
 
     </main>
 

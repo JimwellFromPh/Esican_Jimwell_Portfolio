@@ -1,0 +1,572 @@
+
+/* ========================================
+   SHARED ADMIN DESIGN
+======================================== */
+
+.admin-body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: #0f1117;
+    color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+.admin-body * {
+    box-sizing: border-box;
+}
+
+.admin-body h1,
+.admin-body h2,
+.admin-body h3,
+.admin-body h4 {
+    color: #f5f5f5;
+}
+
+.admin-body p,
+.admin-body small {
+    color: #b8bbc8;
+}
+
+.admin-body a {
+    color: #8585ff;
+    transition: color 0.3s ease;
+}
+
+.admin-body a:hover {
+    color: #aaaaff;
+}
+
+/* ========================================
+   PAGE CONTAINERS
+======================================== */
+
+.admin-body main,
+.admin-body .admin-page,
+.admin-body .profile-admin,
+.admin-body .admin-container,
+.admin-body .admin-content,
+.admin-body .management-container {
+    max-width: 1000px;
+    width: calc(100% - 40px);
+    margin: 40px auto;
+    padding: 25px;
+}
+
+.admin-body main h1,
+.admin-body .admin-page h1 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* ========================================
+   HEADERS
+======================================== */
+
+.admin-body .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: calc(100% - 40px);
+    max-width: 1100px;
+    margin: 40px auto 25px;
+    padding: 0;
+}
+
+.admin-body .admin-header h1 {
+    margin: 0 0 8px;
+}
+
+.admin-body .admin-header p {
+    margin: 0;
+}
+
+.admin-body .admin-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ========================================
+   CARDS AND PANELS
+======================================== */
+
+.admin-body .admin-card,
+.admin-body .admin-panel,
+.admin-body .form-container,
+.admin-body .content-card,
+.admin-body .management-card,
+.admin-body .profile-admin form,
+.admin-body .admin-management {
+    background: #191c26;
+    border: 1px solid #303442;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+    transition: background 0.5s ease, border-color 0.5s ease;
+}
+
+.admin-body .admin-panel {
+    margin-top: 20px;
+}
+
+/* ========================================
+   FORMS
+======================================== */
+
+.admin-body form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.admin-body form > div {
+    width: 100%;
+}
+
+.admin-body .admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.admin-body .admin-form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.admin-body label {
+    display: block;
+    margin-bottom: 7px;
+    color: #f5f5f5;
+    font-weight: 600;
+}
+
+.admin-body input:not([type="checkbox"]):not([type="radio"]),
+.admin-body textarea,
+.admin-body select {
+    display: block;
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #303442;
+    border-radius: 8px;
+    background: #10131b;
+    color: #f5f5f5;
+    font: inherit;
+    outline: none;
+    transition: border-color 0.3s ease, background 0.5s ease;
+}
+
+.admin-body input:focus,
+.admin-body textarea:focus,
+.admin-body select:focus {
+    border-color: #8585ff;
+}
+
+.admin-body textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.admin-body input[type="file"] {
+    padding: 10px;
+}
+
+.admin-body input[type="checkbox"],
+.admin-body input[type="radio"] {
+    accent-color: #8585ff;
+}
+
+.admin-body input::placeholder,
+.admin-body textarea::placeholder {
+    color: #858594;
+}
+
+.admin-body input[type="file"]::file-selector-button {
+    padding: 8px 12px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #303653;
+    color: white;
+    cursor: pointer;
+}
+
+/* ========================================
+   BUTTONS
+======================================== */
+
+.admin-body button,
+.admin-body input[type="submit"],
+.admin-body .admin-button,
+.admin-body .admin-submit-button {
+    display: inline-block;
+    width: fit-content;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #6868e8;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.admin-body button:hover,
+.admin-body input[type="submit"]:hover,
+.admin-body .admin-button:hover,
+.admin-body .admin-submit-button:hover {
+    background: #8585ff;
+    transform: translateY(-2px);
+}
+
+.admin-body button a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* ========================================
+   TABLES
+======================================== */
+
+.admin-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: #191c26;
+    color: #f5f5f5;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.admin-body th,
+.admin-body td {
+    padding: 13px 15px;
+    border: 1px solid #303442;
+    text-align: left;
+}
+
+.admin-body th {
+    background: #242838;
+    color: #ffffff;
+}
+
+.admin-body tr:hover {
+    background: #222637;
+}
+
+/* ========================================
+   MESSAGES AND ALERTS
+======================================== */
+
+.admin-body .admin-message,
+.admin-body .profile-message,
+.admin-body .message,
+.admin-body .alert,
+.admin-body .success-message,
+.admin-body .error-message {
+    padding: 13px 16px;
+    margin: 15px 0;
+    border-radius: 8px;
+}
+
+.admin-body .admin-success,
+.admin-body .profile-success,
+.admin-body .success-message {
+    background: #173d29;
+    color: #9ce5b3;
+}
+
+.admin-body .admin-error,
+.admin-body .profile-error,
+.admin-body .error-message {
+    background: #4a2025;
+    color: #ffb2b2;
+}
+
+/* ========================================
+   IMAGE PREVIEWS
+======================================== */
+
+.admin-body .profile-preview {
+    display: block;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #8585ff;
+}
+
+.admin-body img {
+    max-width: 100%;
+}
+
+/* ========================================
+   DASHBOARD STATISTICS
+======================================== */
+
+.admin-body .admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    width: calc(100% - 40px);
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 0;
+}
+
+.admin-body .admin-stat-card {
+    padding: 22px;
+    background: #191c26;
+    border: 1px solid #303442;
+    border-radius: 12px;
+    transition: transform 0.3s ease, background 0.5s ease;
+}
+
+.admin-body .admin-stat-card:hover {
+    transform: translateY(-4px);
+}
+
+.admin-body .admin-stat-card h2 {
+    margin: 0 0 10px;
+    font-size: 16px;
+}
+
+.admin-body .admin-stat-card p {
+    margin: 0;
+    color: #8585ff;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* ========================================
+   DASHBOARD MANAGEMENT
+======================================== */
+
+.admin-body .admin-management {
+    width: calc(100% - 40px);
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 25px;
+}
+
+.admin-body .admin-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.admin-body .admin-action-link {
+    display: block;
+    padding: 15px;
+    background: #222637;
+    border: 1px solid #303442;
+    border-radius: 8px;
+    color: #f5f5f5;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.admin-body .admin-action-link:hover {
+    background: #303653;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   FOOTER LINKS
+======================================== */
+
+.admin-body .admin-footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: calc(100% - 40px);
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 0;
+}
+
+.admin-body .admin-portfolio-link {
+    color: #8585ff;
+    text-decoration: none;
+}
+
+/* ========================================
+   THEME TOGGLE
+======================================== */
+
+.admin-body .theme-toggle {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.admin-body .theme-toggle:hover {
+    transform: rotate(15deg) scale(1.08);
+}
+
+/* ========================================
+   LIGHT MODE
+======================================== */
+
+.admin-body:not(.dark-mode) {
+    background: #f5f7fb;
+    color: #222222;
+}
+
+.admin-body:not(.dark-mode) h1,
+.admin-body:not(.dark-mode) h2,
+.admin-body:not(.dark-mode) h3,
+.admin-body:not(.dark-mode) h4,
+.admin-body:not(.dark-mode) label {
+    color: #222222;
+}
+
+.admin-body:not(.dark-mode) p,
+.admin-body:not(.dark-mode) small {
+    color: #666666;
+}
+
+.admin-body:not(.dark-mode) a {
+    color: #6868e8;
+}
+
+.admin-body:not(.dark-mode) .admin-card,
+.admin-body:not(.dark-mode) .admin-panel,
+.admin-body:not(.dark-mode) .form-container,
+.admin-body:not(.dark-mode) .content-card,
+.admin-body:not(.dark-mode) .management-card,
+.admin-body:not(.dark-mode) .profile-admin form,
+.admin-body:not(.dark-mode) .admin-stat-card,
+.admin-body:not(.dark-mode) .admin-management {
+    background: #ffffff;
+    border-color: #dddddd;
+}
+
+.admin-body:not(.dark-mode) input:not([type="checkbox"]):not([type="radio"]),
+.admin-body:not(.dark-mode) textarea,
+.admin-body:not(.dark-mode) select {
+    background: #ffffff;
+    color: #222222;
+    border-color: #cccccc;
+}
+
+.admin-body:not(.dark-mode) input::placeholder,
+.admin-body:not(.dark-mode) textarea::placeholder {
+    color: #888888;
+}
+
+.admin-body:not(.dark-mode) table {
+    background: #ffffff;
+    color: #222222;
+}
+
+.admin-body:not(.dark-mode) th {
+    background: #eeeeff;
+    color: #222222;
+}
+
+.admin-body:not(.dark-mode) td,
+.admin-body:not(.dark-mode) th {
+    border-color: #dddddd;
+}
+
+.admin-body:not(.dark-mode) tr:hover {
+    background: #f5f5ff;
+}
+
+.admin-body:not(.dark-mode) .admin-action-link {
+    background: #f5f5fb;
+    border-color: #dddddd;
+    color: #222222;
+}
+
+.admin-body:not(.dark-mode) .admin-action-link:hover {
+    background: #e9e9ff;
+    color: #222222;
+}
+
+.admin-body:not(.dark-mode) .admin-success,
+.admin-body:not(.dark-mode) .profile-success,
+.admin-body:not(.dark-mode) .success-message {
+    background: #e1f5e5;
+    color: #176b2c;
+}
+
+.admin-body:not(.dark-mode) .admin-error,
+.admin-body:not(.dark-mode) .profile-error,
+.admin-body:not(.dark-mode) .error-message {
+    background: #ffe5e5;
+    color: #a00000;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+
+@media (max-width: 768px) {
+
+    .admin-body main,
+    .admin-body .admin-page,
+    .admin-body .profile-admin,
+    .admin-body .admin-container,
+    .admin-body .admin-content,
+    .admin-body .management-container {
+        width: calc(100% - 24px);
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .admin-body .admin-header,
+    .admin-body .admin-stats,
+    .admin-body .admin-management,
+    .admin-body .admin-footer-actions {
+        width: calc(100% - 24px);
+    }
+
+    .admin-body .admin-header {
+        margin-top: 25px;
+    }
+
+    .admin-body .admin-management {
+        margin: 20px auto;
+        padding: 18px;
+    }
+
+    .admin-body .admin-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-body .admin-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-body table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .admin-body button,
+    .admin-body input[type="submit"] {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .admin-body .admin-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-body .admin-header {
+        align-items: flex-start;
+    }
+}

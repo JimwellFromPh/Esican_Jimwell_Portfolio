@@ -112,22 +112,123 @@ if (empty($_SESSION['login_csrf'])) {
     <title>Admin Login | Jimwell's Portfolio</title>
 
     <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        .login-theme {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .login-theme .theme-toggle {
+            border: 1px solid var(--border-color, #303442);
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            padding: 40px;
+            border-radius: 18px;
+            background: var(--card-bg, #191c26);
+            border: 1px solid var(--border-color, #303442);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .login-description {
+            text-align: center;
+            margin-bottom: 30px;
+            opacity: 0.75;
+        }
+
+        .login-card .form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-card label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .login-card input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .login-card .contact-button {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .login-back {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .login-error {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: rgba(220, 53, 69, 0.12);
+            color: #e05b68;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 28px 22px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <main class="contact-section container">
+    <main class="login-page">
 
-        <div class="contact-form-container">
+        <div class="login-theme">
+            <button
+                type="button"
+                class="theme-toggle"
+                aria-label="Toggle dark mode">
+                🌙
+            </button>
+        </div>
+
+        <div class="login-card">
 
             <h2>Admin Login</h2>
 
-            <p>Sign in to manage your portfolio.</p>
+            <p class="login-description">
+                Sign in to manage your portfolio.
+            </p>
 
             <?php if ($error): ?>
-                <p class="form-error">
+                <div class="login-error">
                     <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
-                </p>
+                </div>
             <?php endif; ?>
 
             <form method="POST" action="login.php" autocomplete="off">
@@ -147,7 +248,7 @@ if (empty($_SESSION['login_csrf'])) {
                         name="username"
                         placeholder="Enter your username"
                         maxlength="50"
-                        autocomplete="off"
+                        autocomplete="username"
                         required>
 
                 </div>
@@ -161,7 +262,7 @@ if (empty($_SESSION['login_csrf'])) {
                         id="password"
                         name="password"
                         placeholder="Enter your password"
-                        autocomplete="new-password"
+                        autocomplete="current-password"
                         required>
 
                 </div>
@@ -172,10 +273,15 @@ if (empty($_SESSION['login_csrf'])) {
 
             </form>
 
+            <a href="../index.php" class="login-back">
+                ← Back to Portfolio
+            </a>
+
         </div>
 
     </main>
 
-</body>
+    <script src="../js/script.js" defer></script>
 
+</body>
 </html>

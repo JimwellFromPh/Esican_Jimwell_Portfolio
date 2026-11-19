@@ -238,199 +238,179 @@ if (isset($_GET['success'])) {
     <title>Projects Management</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="admin.css">
 
-    <style>
-        .projects-admin {
-            max-width: 1100px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-
-        .projects-admin input,
-        .projects-admin textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 6px 0 14px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font: inherit;
-        }
-
-        .projects-admin textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .projects-admin button {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 6px;
-            background: #222;
-            color: white;
-            cursor: pointer;
-            margin: 4px;
-        }
-
-        .project-admin-card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .project-admin-card img {
-            width: 180px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .project-message {
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 6px;
-        }
-
-        .project-success {
-            background: #e1f5e5;
-            color: #176b2c;
-        }
-
-        .project-error {
-            background: #ffe5e5;
-            color: #a00000;
-        }
-
-        .delete-button {
-            background: #b42318 !important;
-        }
-    </style>
+    <script src="../js/script.js" defer></script>
 </head>
 
-<body>
+<body class="admin-body">
 
-<main class="projects-admin">
+<main class="admin-page">
 
-    <h1>Projects Management</h1>
-    <p>Add, edit, or delete the projects displayed on your portfolio.</p>
+    <header class="admin-header">
+
+        <div>
+            <h1>Projects Management</h1>
+            <p>Add, edit, or delete the projects displayed on your portfolio.</p>
+        </div>
+
+        <div class="admin-header-actions">
+
+            <button type="button" class="theme-toggle" aria-label="Toggle theme">
+                🌙
+            </button>
+
+        </div>
+
+    </header>
 
     <?php if ($success): ?>
-        <p class="project-message project-success">
+        <p class="admin-message admin-success">
             <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
         </p>
     <?php endif; ?>
 
     <?php if ($error): ?>
-        <p class="project-message project-error">
+        <p class="admin-message admin-error">
             <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
         </p>
     <?php endif; ?>
 
-    <h2>Add New Project</h2>
+    <section class="admin-panel">
 
-    <form method="POST" action="projects.php" enctype="multipart/form-data">
+        <h2>Add New Project</h2>
 
-        <input type="hidden" name="csrf_token"
-            value="<?= htmlspecialchars($_SESSION['projects_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+        <form method="POST" action="projects.php" enctype="multipart/form-data"
+            class="admin-form">
 
-        <input type="hidden" name="action" value="add">
+            <input type="hidden" name="csrf_token"
+                value="<?= htmlspecialchars($_SESSION['projects_csrf'], ENT_QUOTES, 'UTF-8') ?>">
 
-        <label>Project Title</label>
-        <input type="text" name="title" maxlength="255" required>
+            <input type="hidden" name="action" value="add">
 
-        <label>Description</label>
-        <textarea name="description"></textarea>
-
-        <label>Project Link</label>
-        <input type="url" name="link" placeholder="https://example.com">
-
-        <label>Project Image</label>
-        <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp">
-
-        <small>Allowed formats: JPG, PNG, WEBP. Maximum size: 2 MB.</small>
-
-        <br><br>
-
-        <button type="submit">Add Project</button>
-
-    </form>
-
-    <hr>
-
-    <h2>Existing Projects</h2>
-
-    <?php if (empty($projects)): ?>
-
-        <p>No projects found.</p>
-
-    <?php else: ?>
-
-        <?php foreach ($projects as $project): ?>
-
-            <div class="project-admin-card">
-
-                <?php if (!empty($project['image'])): ?>
-                    <img
-                        src="../<?= htmlspecialchars($project['image'], ENT_QUOTES, 'UTF-8') ?>"
-                        alt="Project Image">
-                <?php endif; ?>
-
-                <form method="POST" action="projects.php" enctype="multipart/form-data">
-
-                    <input type="hidden" name="csrf_token"
-                        value="<?= htmlspecialchars($_SESSION['projects_csrf'], ENT_QUOTES, 'UTF-8') ?>">
-
-                    <input type="hidden" name="action" value="edit">
-
-                    <input type="hidden" name="id"
-                        value="<?= (int) $project['id'] ?>">
-
-                    <label>Project Title</label>
-                    <input type="text" name="title"
-                        value="<?= htmlspecialchars($project['title'], ENT_QUOTES, 'UTF-8') ?>"
-                        maxlength="255" required>
-
-                    <label>Description</label>
-                    <textarea name="description"><?= htmlspecialchars($project['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
-
-                    <label>Project Link</label>
-                    <input type="url" name="link"
-                        value="<?= htmlspecialchars($project['link'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                        placeholder="https://example.com">
-
-                    <label>Replace Project Image (Optional)</label>
-                    <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp">
-
-                    <button type="submit">Save Changes</button>
-
-                </form>
-
-                <form method="POST" action="projects.php"
-                    onsubmit="return confirm('Are you sure you want to delete this project?');">
-
-                    <input type="hidden" name="csrf_token"
-                        value="<?= htmlspecialchars($_SESSION['projects_csrf'], ENT_QUOTES, 'UTF-8') ?>">
-
-                    <input type="hidden" name="action" value="delete">
-
-                    <input type="hidden" name="id"
-                        value="<?= (int) $project['id'] ?>">
-
-                    <button type="submit" class="delete-button">Delete Project</button>
-
-                </form>
-
+            <div class="admin-form-group">
+                <label>Project Title</label>
+                <input type="text" name="title" maxlength="255" required>
             </div>
 
-        <?php endforeach; ?>
+            <div class="admin-form-group">
+                <label>Description</label>
+                <textarea name="description"></textarea>
+            </div>
 
-    <?php endif; ?>
+            <div class="admin-form-group">
+                <label>Project Link</label>
+                <input type="url" name="link" placeholder="https://example.com">
+            </div>
 
-    <p>
-        <a href="index.php">Back to Dashboard</a> |
-        <a href="../projects.php" target="_blank">View Public Projects Page</a>
-    </p>
+            <div class="admin-form-group">
+                <label>Project Image</label>
+                <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp">
+                <small>Allowed formats: JPG, PNG, WEBP. Maximum size: 2 MB.</small>
+            </div>
+
+            <button type="submit" class="admin-submit-button">
+                Add Project
+            </button>
+
+        </form>
+
+    </section>
+
+    <section class="admin-panel">
+
+        <h2>Existing Projects</h2>
+
+        <?php if (empty($projects)): ?>
+
+            <p>No projects found.</p>
+
+        <?php else: ?>
+
+            <?php foreach ($projects as $project): ?>
+
+                <div class="admin-card">
+
+                    <?php if (!empty($project['image'])): ?>
+                        <img
+                            src="../<?= htmlspecialchars($project['image'], ENT_QUOTES, 'UTF-8') ?>"
+                            alt="Project Image"
+                            class="profile-preview">
+                    <?php endif; ?>
+
+                    <form method="POST" action="projects.php"
+                        enctype="multipart/form-data" class="admin-form">
+
+                        <input type="hidden" name="csrf_token"
+                            value="<?= htmlspecialchars($_SESSION['projects_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+
+                        <input type="hidden" name="action" value="edit">
+
+                        <input type="hidden" name="id"
+                            value="<?= (int) $project['id'] ?>">
+
+                        <div class="admin-form-group">
+                            <label>Project Title</label>
+                            <input type="text" name="title"
+                                value="<?= htmlspecialchars($project['title'], ENT_QUOTES, 'UTF-8') ?>"
+                                maxlength="255" required>
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label>Description</label>
+                            <textarea name="description"><?= htmlspecialchars($project['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label>Project Link</label>
+                            <input type="url" name="link"
+                                value="<?= htmlspecialchars($project['link'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                                placeholder="https://example.com">
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label>Replace Project Image (Optional)</label>
+                            <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp">
+                        </div>
+
+                        <button type="submit" class="admin-submit-button">
+                            Save Changes
+                        </button>
+
+                    </form>
+
+                    <form method="POST" action="projects.php"
+                        onsubmit="return confirm('Are you sure you want to delete this project?');">
+
+                        <input type="hidden" name="csrf_token"
+                            value="<?= htmlspecialchars($_SESSION['projects_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+
+                        <input type="hidden" name="action" value="delete">
+
+                        <input type="hidden" name="id"
+                            value="<?= (int) $project['id'] ?>">
+
+                        <button type="submit" class="admin-button delete-button">
+                            Delete Project
+                        </button>
+
+                    </form>
+
+                </div>
+
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+
+    </section>
+
+    <div class="admin-footer-actions">
+
+        <a href="index.php">← Back to Dashboard</a>
+
+        <a href="../projects.php" target="_blank">View Public Projects Page →</a>
+
+    </div>
 
 </main>
 

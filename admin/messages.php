@@ -65,6 +65,14 @@ if (isset($_GET['updated'])) {
 } elseif (isset($_GET['deleted'])) {
     $success = 'Message deleted successfully!';
 }
+
+$unreadCount = 0;
+
+foreach ($messageList as $message) {
+    if (!$message['is_read']) {
+        $unreadCount++;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -77,171 +85,295 @@ if (isset($_GET['updated'])) {
     <title>Messages Management</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="admin.css">
+
+    <script src="../js/script.js" defer></script>
 
     <style>
-        .messages-admin {
-            max-width: 1100px;
-            margin: 50px auto;
-            padding: 20px;
+        .messages-summary {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
         }
 
-        .message-card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
+        .messages-summary-item {
+            flex: 1;
+            min-width: 140px;
+            padding: 18px;
+            border: 1px solid var(--admin-border, #303442);
+            border-radius: 12px;
+        }
+
+        .messages-summary-item strong {
+            display: block;
+            font-size: 25px;
+            margin-top: 5px;
+        }
+
+        .messages-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .message-item {
+            padding: 22px;
+            border: 1px solid var(--admin-border, #303442);
+            border-radius: 14px;
+            background: var(--admin-card-bg, #191c26);
             overflow-wrap: anywhere;
         }
 
-        .message-card.unread {
-            border-left: 5px solid #2563eb;
-            background: #f5f8ff;
+        .message-item.unread {
+            border-left: 4px solid #6868e8;
         }
 
-        .message-card.read {
-            border-left: 5px solid #999;
-        }
-
-        .message-card button {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 6px;
-            background: #222;
-            color: white;
-            cursor: pointer;
-            margin: 4px;
-        }
-
-        .message-card .delete-button {
-            background: #b42318;
-        }
-
-        .message-alert {
-            padding: 12px;
+        .message-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
             margin-bottom: 15px;
-            border-radius: 6px;
         }
 
-        .message-success {
-            background: #e1f5e5;
-            color: #176b2c;
+        .message-sender h3 {
+            margin: 0 0 5px;
         }
 
-        .message-error {
-            background: #ffe5e5;
-            color: #a00000;
+        .message-sender p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--admin-muted, #a0a4b5);
         }
 
         .message-status {
-            font-weight: bold;
+            display: inline-block;
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .message-status.unread {
+            background: rgba(104, 104, 232, 0.15);
+            color: #8585ff;
+        }
+
+        .message-status.read {
+            background: rgba(128, 128, 128, 0.15);
+            color: #999;
+        }
+
+        .message-subject {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 18px 0 12px;
+        }
+
+        .message-date {
+            font-size: 13px;
+            color: var(--admin-muted, #a0a4b5);
+        }
+
+        .message-content {
+            padding: 16px;
+            margin: 12px 0 18px;
+            border-radius: 10px;
+            background: rgba(128, 128, 128, 0.08);
+            line-height: 1.7;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+        .message-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .message-actions form {
+            margin: 0;
+        }
+
+        .message-actions button {
+            margin: 0;
+        }
+
+        .message-delete-button {
+            background: #b42318 !important;
+        }
+
+        .messages-empty {
+            text-align: center;
+            padding: 45px 20px;
+        }
+
+        .messages-empty h3 {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .message-top {
+                flex-direction: column;
+            }
+
+            .message-actions {
+                flex-direction: column;
+            }
+
+            .message-actions form,
+            .message-actions button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 
-<body>
+<body class="admin-body">
 
-<main class="messages-admin">
+<main class="admin-page">
 
-    <h1>Messages Management</h1>
+    <header class="admin-header">
+        <div>
+            <h1>Messages</h1>
+            <p>View and manage messages submitted through your contact form.</p>
+        </div>
 
-    <p>View and manage messages submitted through your contact form.</p>
+        <button type="button" class="theme-toggle" aria-label="Toggle theme">
+            🌙
+        </button>
+    </header>
 
     <?php if ($success): ?>
-        <p class="message-alert message-success">
+        <p class="admin-message admin-success">
             <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
         </p>
     <?php endif; ?>
 
     <?php if ($error): ?>
-        <p class="message-alert message-error">
+        <p class="admin-message admin-error">
             <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
         </p>
     <?php endif; ?>
 
-    <h2>Received Messages (<?= count($messageList) ?>)</h2>
+    <section class="admin-panel">
 
-    <?php if (empty($messageList)): ?>
+        <div class="messages-summary">
 
-        <p>No messages received yet.</p>
+            <div class="messages-summary-item">
+                <span>Total Messages</span>
+                <strong><?= count($messageList) ?></strong>
+            </div>
 
-    <?php else: ?>
+            <div class="messages-summary-item">
+                <span>Unread Messages</span>
+                <strong><?= $unreadCount ?></strong>
+            </div>
 
-        <?php foreach ($messageList as $message): ?>
+        </div>
 
-            <div class="message-card <?= $message['is_read'] ? 'read' : 'unread' ?>">
+        <h2>Inbox</h2>
 
-                <p class="message-status">
-                    <?= $message['is_read'] ? 'Read' : 'Unread' ?>
-                </p>
+        <?php if (empty($messageList)): ?>
 
-                <h3>
-                    <?= htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8') ?>
-                </h3>
+            <div class="messages-empty">
+                <h3>No messages yet</h3>
+                <p>Messages submitted through your contact form will appear here.</p>
+            </div>
 
-                <p>
-                    <strong>From:</strong>
-                    <?= htmlspecialchars($message['name'], ENT_QUOTES, 'UTF-8') ?>
-                </p>
+        <?php else: ?>
 
-                <p>
-                    <strong>Email:</strong>
-                    <?= htmlspecialchars($message['email'], ENT_QUOTES, 'UTF-8') ?>
-                </p>
+            <div class="messages-list">
 
-                <p>
-                    <strong>Date:</strong>
-                    <?= htmlspecialchars($message['created_at'], ENT_QUOTES, 'UTF-8') ?>
-                </p>
+                <?php foreach ($messageList as $message): ?>
 
-                <p><strong>Message:</strong></p>
+                    <article class="message-item <?= $message['is_read'] ? 'read' : 'unread' ?>">
 
-                <p>
-                    <?= nl2br(htmlspecialchars($message['message'], ENT_QUOTES, 'UTF-8')) ?>
-                </p>
+                        <div class="message-top">
 
-                <form method="POST" action="messages.php" style="display:inline;">
+                            <div class="message-sender">
+                                <h3>
+                                    <?= htmlspecialchars($message['name'], ENT_QUOTES, 'UTF-8') ?>
+                                </h3>
 
-                    <input type="hidden" name="csrf_token"
-                        value="<?= htmlspecialchars($_SESSION['messages_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+                                <p>
+                                    <?= htmlspecialchars($message['email'], ENT_QUOTES, 'UTF-8') ?>
+                                </p>
+                            </div>
 
-                    <input type="hidden" name="action" value="toggle">
+                            <span class="message-status <?= $message['is_read'] ? 'read' : 'unread' ?>">
+                                <?= $message['is_read'] ? 'Read' : 'Unread' ?>
+                            </span>
 
-                    <input type="hidden" name="id"
-                        value="<?= (int) $message['id'] ?>">
+                        </div>
 
-                    <button type="submit">
-                        Mark as <?= $message['is_read'] ? 'Unread' : 'Read' ?>
-                    </button>
+                        <p class="message-date">
+                            Received:
+                            <?= htmlspecialchars($message['created_at'], ENT_QUOTES, 'UTF-8') ?>
+                        </p>
 
-                </form>
+                        <h3 class="message-subject">
+                            <?= htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8') ?>
+                        </h3>
 
-                <form method="POST" action="messages.php" style="display:inline;"
-                    onsubmit="return confirm('Are you sure you want to delete this message?');">
+                        <div class="message-content">
+                            <?= nl2br(htmlspecialchars($message['message'], ENT_QUOTES, 'UTF-8')) ?>
+                        </div>
 
-                    <input type="hidden" name="csrf_token"
-                        value="<?= htmlspecialchars($_SESSION['messages_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+                        <div class="message-actions">
 
-                    <input type="hidden" name="action" value="delete">
+                            <form method="POST" action="messages.php">
 
-                    <input type="hidden" name="id"
-                        value="<?= (int) $message['id'] ?>">
+                                <input type="hidden" name="csrf_token"
+                                    value="<?= htmlspecialchars($_SESSION['messages_csrf'], ENT_QUOTES, 'UTF-8') ?>">
 
-                    <button type="submit" class="delete-button">
-                        Delete Message
-                    </button>
+                                <input type="hidden" name="action" value="toggle">
 
-                </form>
+                                <input type="hidden" name="id"
+                                    value="<?= (int) $message['id'] ?>">
+
+                                <button type="submit" class="admin-button">
+                                    Mark as <?= $message['is_read'] ? 'Unread' : 'Read' ?>
+                                </button>
+
+                            </form>
+
+                            <form method="POST" action="messages.php"
+                                onsubmit="return confirm('Are you sure you want to delete this message?');">
+
+                                <input type="hidden" name="csrf_token"
+                                    value="<?= htmlspecialchars($_SESSION['messages_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+
+                                <input type="hidden" name="action" value="delete">
+
+                                <input type="hidden" name="id"
+                                    value="<?= (int) $message['id'] ?>">
+
+                                <button type="submit" class="admin-button message-delete-button">
+                                    Delete Message
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </article>
+
+                <?php endforeach; ?>
 
             </div>
 
-        <?php endforeach; ?>
+        <?php endif; ?>
 
-    <?php endif; ?>
+    </section>
 
-    <p>
-        <a href="index.php">Back to Dashboard</a> |
+    <div class="admin-footer-actions">
+        <a href="index.php">Back to Dashboard</a>
+        |
         <a href="../contact.php" target="_blank">View Contact Page</a>
-    </p>
+    </div>
 
 </main>
 

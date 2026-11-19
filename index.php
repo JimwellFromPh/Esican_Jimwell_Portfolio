@@ -36,7 +36,6 @@ $profileImage = htmlspecialchars($profile['profile_image'], ENT_QUOTES, 'UTF-8')
 <body>
 
     <header class="header">
-
         <nav class="navbar container">
 
             <a href="index.php" class="logo">
@@ -51,7 +50,6 @@ $profileImage = htmlspecialchars($profile['profile_image'], ENT_QUOTES, 'UTF-8')
             </button>
 
             <div class="nav-links">
-
                 <a href="index.php">Home</a>
                 <a href="about.php">About</a>
                 <a href="skills.php">Skills</a>
@@ -64,11 +62,9 @@ $profileImage = htmlspecialchars($profile['profile_image'], ENT_QUOTES, 'UTF-8')
                     aria-label="Toggle dark mode">
                     🌙
                 </button>
-
             </div>
 
         </nav>
-
     </header>
 
     <main>
@@ -219,6 +215,10 @@ $profileImage = htmlspecialchars($profile['profile_image'], ENT_QUOTES, 'UTF-8')
             © 2026 Jimwell Esican.
             Built with HTML, CSS & JavaScript.
         </p>
+
+        <a href="admin/login.php" class="admin-login-link">
+            Admin Login
+        </a>
 
     </footer>
 

@@ -36,14 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             } elseif (
                 ($startYear !== '' && !preg_match('/^\d{4}$/', $startYear)) ||
-                ($endYear !== '' && !preg_match('/^\d{4}$/', $endYear))
+                ($endYear !== '' && !preg_match('/^(\d{4}|Present)$/i', $endYear))
             ) {
-                $error = 'Please enter valid four-digit years.';
+                $error = 'Please enter a valid year or Present for the end year.';
 
             } elseif (
                 $startYear !== '' &&
-                $endYear !== '' &&
-                $endYear !== 'Present' &&
+                preg_match('/^\d{4}$/', $endYear) &&
                 (int) $endYear < (int) $startYear
             ) {
                 $error = 'End year cannot be earlier than start year.';
@@ -143,191 +142,183 @@ if (isset($_GET['success'])) {
     <title>Education Management</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="admin.css">
 
-    <style>
-        .education-admin {
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-
-        .education-admin input,
-        .education-admin textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 6px 0 14px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font: inherit;
-        }
-
-        .education-admin textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .education-admin button {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 6px;
-            background: #222;
-            color: white;
-            cursor: pointer;
-            margin: 4px;
-        }
-
-        .education-admin-card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .education-message {
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 6px;
-        }
-
-        .education-success {
-            background: #e1f5e5;
-            color: #176b2c;
-        }
-
-        .education-error {
-            background: #ffe5e5;
-            color: #a00000;
-        }
-
-        .delete-button {
-            background: #b42318 !important;
-        }
-    </style>
+    <script src="../js/script.js" defer></script>
 </head>
 
-<body>
+<body class="admin-body">
 
-<main class="education-admin">
+<main class="admin-page">
 
-    <h1>Education Management</h1>
-    <p>Manage the educational background displayed on your portfolio.</p>
+    <header class="admin-header">
+
+        <div>
+            <h1>Education Management</h1>
+            <p>Manage the educational background displayed on your portfolio.</p>
+        </div>
+
+        <div class="admin-header-actions">
+
+            <button type="button" class="theme-toggle" aria-label="Toggle theme">
+                🌙
+            </button>
+
+        </div>
+
+    </header>
 
     <?php if ($success): ?>
-        <p class="education-message education-success">
+        <p class="admin-message admin-success">
             <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
         </p>
     <?php endif; ?>
 
     <?php if ($error): ?>
-        <p class="education-message education-error">
+        <p class="admin-message admin-error">
             <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
         </p>
     <?php endif; ?>
 
-    <h2>Add Education</h2>
+    <section class="admin-panel">
 
-    <form method="POST" action="education.php">
+        <h2>Add Education</h2>
 
-        <input type="hidden" name="csrf_token"
-            value="<?= htmlspecialchars($_SESSION['education_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+        <form method="POST" action="education.php" class="admin-form">
 
-        <input type="hidden" name="action" value="add">
+            <input type="hidden" name="csrf_token"
+                value="<?= htmlspecialchars($_SESSION['education_csrf'], ENT_QUOTES, 'UTF-8') ?>">
 
-        <label>School</label>
-        <input type="text" name="school" maxlength="255" required>
+            <input type="hidden" name="action" value="add">
 
-        <label>Degree / Program</label>
-        <input type="text" name="degree" maxlength="255" required>
-
-        <label>Start Year</label>
-        <input type="text" name="start_year" maxlength="4" placeholder="2024">
-
-        <label>End Year</label>
-        <input type="text" name="end_year" maxlength="7" placeholder="Present">
-
-        <label>Description</label>
-        <textarea name="description"></textarea>
-
-        <button type="submit">Add Education</button>
-
-    </form>
-
-    <hr>
-
-    <h2>Existing Education Records</h2>
-
-    <?php if (empty($educationList)): ?>
-
-        <p>No education records found.</p>
-
-    <?php else: ?>
-
-        <?php foreach ($educationList as $education): ?>
-
-            <div class="education-admin-card">
-
-                <form method="POST" action="education.php">
-
-                    <input type="hidden" name="csrf_token"
-                        value="<?= htmlspecialchars($_SESSION['education_csrf'], ENT_QUOTES, 'UTF-8') ?>">
-
-                    <input type="hidden" name="action" value="edit">
-
-                    <input type="hidden" name="id"
-                        value="<?= (int) $education['id'] ?>">
-
-                    <label>School</label>
-                    <input type="text" name="school"
-                        value="<?= htmlspecialchars($education['school'], ENT_QUOTES, 'UTF-8') ?>"
-                        maxlength="255" required>
-
-                    <label>Degree / Program</label>
-                    <input type="text" name="degree"
-                        value="<?= htmlspecialchars($education['degree'], ENT_QUOTES, 'UTF-8') ?>"
-                        maxlength="255" required>
-
-                    <label>Start Year</label>
-                    <input type="text" name="start_year"
-                        value="<?= htmlspecialchars($education['start_year'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                        maxlength="4">
-
-                    <label>End Year</label>
-                    <input type="text" name="end_year"
-                        value="<?= htmlspecialchars($education['end_year'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                        maxlength="7">
-
-                    <label>Description</label>
-                    <textarea name="description"><?= htmlspecialchars($education['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
-
-                    <button type="submit">Save Changes</button>
-
-                </form>
-
-                <form method="POST" action="education.php"
-                    onsubmit="return confirm('Are you sure you want to delete this education record?');">
-
-                    <input type="hidden" name="csrf_token"
-                        value="<?= htmlspecialchars($_SESSION['education_csrf'], ENT_QUOTES, 'UTF-8') ?>">
-
-                    <input type="hidden" name="action" value="delete">
-
-                    <input type="hidden" name="id"
-                        value="<?= (int) $education['id'] ?>">
-
-                    <button type="submit" class="delete-button">Delete Education</button>
-
-                </form>
-
+            <div class="admin-form-group">
+                <label>School</label>
+                <input type="text" name="school" maxlength="255" required>
             </div>
 
-        <?php endforeach; ?>
+            <div class="admin-form-group">
+                <label>Degree / Program</label>
+                <input type="text" name="degree" maxlength="255" required>
+            </div>
 
-    <?php endif; ?>
+            <div class="admin-form-group">
+                <label>Start Year</label>
+                <input type="text" name="start_year" maxlength="4" placeholder="2024">
+            </div>
 
-    <p>
-        <a href="index.php">Back to Dashboard</a> |
-        <a href="../resume.php" target="_blank">View Public Resume Page</a>
-    </p>
+            <div class="admin-form-group">
+                <label>End Year</label>
+                <input type="text" name="end_year" maxlength="7" placeholder="Present">
+            </div>
+
+            <div class="admin-form-group">
+                <label>Description</label>
+                <textarea name="description"></textarea>
+            </div>
+
+            <button type="submit" class="admin-submit-button">
+                Add Education
+            </button>
+
+        </form>
+
+    </section>
+
+    <section class="admin-panel">
+
+        <h2>Existing Education Records</h2>
+
+        <?php if (empty($educationList)): ?>
+
+            <p>No education records found.</p>
+
+        <?php else: ?>
+
+            <?php foreach ($educationList as $education): ?>
+
+                <div class="admin-card">
+
+                    <form method="POST" action="education.php" class="admin-form">
+
+                        <input type="hidden" name="csrf_token"
+                            value="<?= htmlspecialchars($_SESSION['education_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+
+                        <input type="hidden" name="action" value="edit">
+
+                        <input type="hidden" name="id"
+                            value="<?= (int) $education['id'] ?>">
+
+                        <div class="admin-form-group">
+                            <label>School</label>
+                            <input type="text" name="school"
+                                value="<?= htmlspecialchars($education['school'], ENT_QUOTES, 'UTF-8') ?>"
+                                maxlength="255" required>
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label>Degree / Program</label>
+                            <input type="text" name="degree"
+                                value="<?= htmlspecialchars($education['degree'], ENT_QUOTES, 'UTF-8') ?>"
+                                maxlength="255" required>
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label>Start Year</label>
+                            <input type="text" name="start_year"
+                                value="<?= htmlspecialchars($education['start_year'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                                maxlength="4">
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label>End Year</label>
+                            <input type="text" name="end_year"
+                                value="<?= htmlspecialchars($education['end_year'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                                maxlength="7">
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label>Description</label>
+                            <textarea name="description"><?= htmlspecialchars($education['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                        </div>
+
+                        <button type="submit" class="admin-submit-button">
+                            Save Changes
+                        </button>
+
+                    </form>
+
+                    <form method="POST" action="education.php"
+                        onsubmit="return confirm('Are you sure you want to delete this education record?');">
+
+                        <input type="hidden" name="csrf_token"
+                            value="<?= htmlspecialchars($_SESSION['education_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+
+                        <input type="hidden" name="action" value="delete">
+
+                        <input type="hidden" name="id"
+                            value="<?= (int) $education['id'] ?>">
+
+                        <button type="submit" class="admin-button delete-button">
+                            Delete Education
+                        </button>
+
+                    </form>
+
+                </div>
+
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+
+    </section>
+
+    <div class="admin-footer-actions">
+
+        <a href="index.php">← Back to Dashboard</a>
+
+        <a href="../resume.php" target="_blank">View Public Resume Page →</a>
+
+    </div>
 
 </main>
 

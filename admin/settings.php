@@ -152,7 +152,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = 'Unable to save website settings.';
                 }
             }
-
         }
     }
 }
@@ -175,147 +174,122 @@ if (isset($_GET['saved'])) {
     <title>Website Settings</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="admin.css">
 
-    <style>
-        .settings-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-
-        .settings-container input,
-        .settings-container select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0 18px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font: inherit;
-        }
-
-        .settings-container button {
-            padding: 12px 20px;
-            background: #222;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .settings-logo {
-            max-width: 150px;
-            max-height: 150px;
-            object-fit: contain;
-            display: block;
-            margin: 10px 0 20px;
-        }
-
-        .settings-message {
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
-
-        .settings-success {
-            background: #e1f5e5;
-            color: #176b2c;
-        }
-
-        .settings-error {
-            background: #ffe5e5;
-            color: #a00000;
-        }
-    </style>
+    <script src="../js/script.js" defer></script>
 </head>
 
-<body>
+<body class="admin-body">
 
-<main class="settings-container">
+<main class="admin-page">
 
-    <h1>Website Settings</h1>
+    <header class="admin-header">
+        <div>
+            <h1>Website Settings</h1>
+            <p>Manage your portfolio's title, logo, and appearance.</p>
+        </div>
 
-    <p>Manage your portfolio's title, logo, and appearance.</p>
+        <button type="button" class="theme-toggle" aria-label="Toggle theme">
+            🌙
+        </button>
+    </header>
 
     <?php if ($success): ?>
-        <p class="settings-message settings-success">
+        <p class="admin-message admin-success">
             <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
         </p>
     <?php endif; ?>
 
     <?php if ($error): ?>
-        <p class="settings-message settings-error">
+        <p class="admin-message admin-error">
             <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
         </p>
     <?php endif; ?>
 
-    <form method="POST" action="settings.php" enctype="multipart/form-data">
+    <section class="admin-panel">
 
-        <input type="hidden" name="csrf_token"
-            value="<?= htmlspecialchars($_SESSION['settings_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+        <form method="POST" action="settings.php"
+            enctype="multipart/form-data" class="admin-form">
 
-        <label>Website Title</label>
+            <input type="hidden" name="csrf_token"
+                value="<?= htmlspecialchars($_SESSION['settings_csrf'], ENT_QUOTES, 'UTF-8') ?>">
 
-        <input
-            type="text"
-            name="site_title"
-            maxlength="150"
-            value="<?= htmlspecialchars($settings['site_title'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-            placeholder="Jimwell Esican | Portfolio"
-            required
-        >
+            <div class="admin-form-group">
+                <label>Website Title</label>
 
-        <label>Website Logo</label>
+                <input
+                    type="text"
+                    name="site_title"
+                    maxlength="150"
+                    value="<?= htmlspecialchars($settings['site_title'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                    placeholder="Jimwell Esican | Portfolio"
+                    required
+                >
+            </div>
 
-        <?php if (!empty($settings['logo'])): ?>
+            <div class="admin-form-group">
 
-            <p>Current Logo:</p>
+                <label>Website Logo</label>
 
-            <img
-                src="../<?= htmlspecialchars($settings['logo'], ENT_QUOTES, 'UTF-8') ?>"
-                alt="Current Website Logo"
-                class="settings-logo"
-            >
+                <?php if (!empty($settings['logo'])): ?>
 
-        <?php else: ?>
+                    <p>Current Logo:</p>
 
-            <p>No logo uploaded yet.</p>
+                    <img
+                        src="../<?= htmlspecialchars($settings['logo'], ENT_QUOTES, 'UTF-8') ?>"
+                        alt="Current Website Logo"
+                        class="profile-preview settings-logo"
+                    >
 
-        <?php endif; ?>
+                <?php else: ?>
 
-        <input
-            type="file"
-            name="logo"
-            accept=".jpg,.jpeg,.png,.webp"
-        >
+                    <p>No logo uploaded yet.</p>
 
-        <small>Allowed formats: JPG, PNG, WEBP. Maximum size: 2 MB.</small>
+                <?php endif; ?>
 
-        <br><br>
+                <input
+                    type="file"
+                    name="logo"
+                    accept=".jpg,.jpeg,.png,.webp"
+                >
 
-        <label>Website Theme</label>
+                <small>Allowed formats: JPG, PNG, WEBP. Maximum size: 2 MB.</small>
 
-        <select name="theme">
+            </div>
 
-            <option value="light"
-                <?= ($settings['theme'] ?? 'light') === 'light' ? 'selected' : '' ?>>
-                Light
-            </option>
+            <div class="admin-form-group">
 
-            <option value="dark"
-                <?= ($settings['theme'] ?? 'light') === 'dark' ? 'selected' : '' ?>>
-                Dark
-            </option>
+                <label>Website Theme</label>
 
-        </select>
+                <select name="theme">
 
-        <button type="submit">Save Settings</button>
+                    <option value="light"
+                        <?= ($settings['theme'] ?? 'light') === 'light' ? 'selected' : '' ?>>
+                        Light
+                    </option>
 
-    </form>
+                    <option value="dark"
+                        <?= ($settings['theme'] ?? 'light') === 'dark' ? 'selected' : '' ?>>
+                        Dark
+                    </option>
 
-    <p>
-        <a href="index.php">Back to Dashboard</a> |
+                </select>
+
+            </div>
+
+            <button type="submit" class="admin-submit-button">
+                Save Settings
+            </button>
+
+        </form>
+
+    </section>
+
+    <div class="admin-footer-actions">
+        <a href="index.php">Back to Dashboard</a>
+        |
         <a href="../index.php" target="_blank">View Portfolio</a>
-    </p>
+    </div>
 
 </main>
 
