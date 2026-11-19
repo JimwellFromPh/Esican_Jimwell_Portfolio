@@ -6,6 +6,14 @@ require_once __DIR__ . '/includes/db.php';
 $stmt = $pdo->query("SELECT * FROM skills ORDER BY id ASC");
 $skills = $stmt->fetchAll();
 
+// Get website settings
+$settingsStmt = $pdo->query("SELECT * FROM settings LIMIT 1");
+$settings = $settingsStmt->fetch();
+
+$siteTitle = !empty($settings['site_title'])
+    ? $settings['site_title']
+    : 'My Portfolio | Skills';
+
 // Assign an icon based on the skill category
 function getSkillIcon($category) {
     $icons = [
@@ -38,7 +46,7 @@ function getSkillLabel($level) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Portfolio | Skills</title>
+    <title><?= htmlspecialchars($siteTitle, ENT_QUOTES, 'UTF-8') ?></title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>

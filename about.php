@@ -2,6 +2,7 @@
 <?php
 require_once __DIR__ . '/includes/db.php';
 
+// Get profile information
 $stmt = $pdo->query("SELECT * FROM profile LIMIT 1");
 $profile = $stmt->fetch();
 
@@ -9,12 +10,21 @@ if (!$profile) {
     die('Profile information not found.');
 }
 
+// Get website settings
 $settingsStmt = $pdo->query("SELECT * FROM settings LIMIT 1");
 $settings = $settingsStmt->fetch();
 
 $siteTitle = !empty($settings['site_title'])
     ? $settings['site_title']
     : $profile['full_name'] . ' | About';
+
+// Get education records
+$educationStmt = $pdo->query("SELECT * FROM education ORDER BY id ASC");
+$education = $educationStmt->fetchAll();
+
+// Convert interests into a list
+$interests = preg_split('/\r\n|\r|\n/', $profile['interests'] ?? '');
+$interests = array_filter(array_map('trim', $interests));
 ?>
 
 <!DOCTYPE html>
@@ -98,7 +108,7 @@ $siteTitle = !empty($settings['site_title'])
                 </h2>
 
                 <p>
-                    <?= nl2br(htmlspecialchars($profile['biography'], ENT_QUOTES, 'UTF-8')) ?>
+                    <?= nl2br(htmlspecialchars($profile['biography'] ?? '', ENT_QUOTES, 'UTF-8')) ?>
                 </p>
 
             </div>
@@ -113,17 +123,37 @@ $siteTitle = !empty($settings['site_title'])
                     Education
                 </h2>
 
-                <p>
-                    I am currently studying Information Technology and developing my skills in
-                    programming, web development, and digital design.
-                </p>
+                <?php if (!empty($education)): ?>
 
-                <p>
-                    My school activities have allowed me to
-                    practice creating websites, posters,
-                    logos, animations, and other digital
-                    projects.
-                </p>
+                    <?php foreach ($education as $item): ?>
+
+                        <p>
+                            <strong>
+                                <?= htmlspecialchars($item['degree'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                            </strong>
+                        </p>
+
+                        <p>
+                            <?= htmlspecialchars($item['school'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                        </p>
+
+                        <p>
+                            <?= htmlspecialchars($item['start_year'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                            –
+                            <?= htmlspecialchars($item['end_year'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                        </p>
+
+                        <p>
+                            <?= htmlspecialchars($item['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                        </p>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <p>No education records have been added yet.</p>
+
+                <?php endif; ?>
 
             </div>
 
@@ -139,11 +169,21 @@ $siteTitle = !empty($settings['site_title'])
 
                 <ul class="interest-list">
 
-                    <li>💻 Web Development</li>
-                    <li>🎨 Graphic Design</li>
-                    <li>🎬 Animation</li>
-                    <li>🖥️ Technology</li>
-                    <li>✏️ Digital Art</li>
+                    <?php if (!empty($interests)): ?>
+
+                        <?php foreach ($interests as $interest): ?>
+
+                            <li>
+                                <?= htmlspecialchars($interest, ENT_QUOTES, 'UTF-8') ?>
+                            </li>
+
+                        <?php endforeach; ?>
+
+                    <?php else: ?>
+
+                        <li>No interests have been added yet.</li>
+
+                    <?php endif; ?>
 
                 </ul>
 
@@ -160,15 +200,7 @@ $siteTitle = !empty($settings['site_title'])
                 </h2>
 
                 <p>
-                    My goal is to continue improving my
-                    skills and gain more experience in
-                    technology and digital design.
-                </p>
-
-                <p>
-                    I want to create useful, creative,
-                    and meaningful digital projects in
-                    the future.
+                    <?= nl2br(htmlspecialchars($profile['goals'] ?? '', ENT_QUOTES, 'UTF-8')) ?>
                 </p>
 
             </div>
@@ -188,11 +220,7 @@ $siteTitle = !empty($settings['site_title'])
                 </h2>
 
                 <p>
-                    Every project gives me an opportunity
-                    to learn something new. I believe that
-                    practicing and trying different ideas
-                    can help me improve my skills and become
-                    better at what I do.
+                    <?= nl2br(htmlspecialchars($profile['journey'] ?? '', ENT_QUOTES, 'UTF-8')) ?>
                 </p>
 
             </div>

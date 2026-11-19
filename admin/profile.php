@@ -33,6 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $headline = trim($_POST['headline'] ?? '');
         $introduction = trim($_POST['introduction'] ?? '');
         $biography = trim($_POST['biography'] ?? '');
+        $interests = trim($_POST['interests'] ?? '');
+        $goals = trim($_POST['goals'] ?? '');
+        $journey = trim($_POST['journey'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $phone = trim($_POST['phone'] ?? '');
         $location = trim($_POST['location'] ?? '');
@@ -119,6 +122,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             headline = ?,
                             introduction = ?,
                             biography = ?,
+                            interests = ?,
+                            goals = ?,
+                            journey = ?,
                             email = ?,
                             phone = ?,
                             location = ?,
@@ -131,6 +137,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $headline,
                         $introduction,
                         $biography,
+                        $interests,
+                        $goals,
+                        $journey,
                         $email,
                         $phone,
                         $location,
@@ -333,6 +342,28 @@ if (isset($_GET['updated'])) {
                 <textarea
                     id="biography"
                     name="biography"><?= htmlspecialchars($profile['biography'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+
+            <div>
+                <label for="interests">My Interests</label>
+                <textarea
+                    id="interests"
+                    name="interests"
+                    placeholder="Enter your interests, one per line"><?= htmlspecialchars($profile['interests'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+
+            <div>
+                <label for="goals">My Goals</label>
+                <textarea
+                    id="goals"
+                    name="goals"><?= htmlspecialchars($profile['goals'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+
+            <div>
+                <label for="journey">My Journey</label>
+                <textarea
+                    id="journey"
+                    name="journey"><?= htmlspecialchars($profile['journey'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
 
             <div>

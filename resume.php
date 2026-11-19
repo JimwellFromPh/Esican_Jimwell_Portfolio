@@ -13,6 +13,14 @@ $experiences = $experienceStmt->fetchAll();
 // Get achievement records
 $achievementStmt = $pdo->query("SELECT * FROM achievements ORDER BY id ASC");
 $achievements = $achievementStmt->fetchAll();
+
+// Get website settings
+$settingsStmt = $pdo->query("SELECT * FROM settings LIMIT 1");
+$settings = $settingsStmt->fetch();
+
+$siteTitle = !empty($settings['site_title'])
+    ? $settings['site_title']
+    : 'My Portfolio | Resume';
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +30,7 @@ $achievements = $achievementStmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Portfolio | Resume</title>
+    <title><?= htmlspecialchars($siteTitle, ENT_QUOTES, 'UTF-8') ?></title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
