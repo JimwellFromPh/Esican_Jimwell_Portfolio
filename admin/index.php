@@ -12,12 +12,16 @@ $unreadCount = (int) $pdo->query("SELECT COUNT(*) FROM messages WHERE is_read = 
 
 $username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_QUOTES, 'UTF-8');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Admin Dashboard</title>
+
     <link rel="stylesheet" href="../css/style.css">
 
     <style>
@@ -72,19 +76,30 @@ $username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_QUOTES,
             background: #222;
             color: white;
         }
+
+        .admin-actions a:hover {
+            background: #444;
+        }
+
+        .admin-actions .section-link {
+            background: #444;
+        }
     </style>
 </head>
+
 <body>
 
 <div class="admin-dashboard">
 
     <div class="admin-header">
+
         <div>
             <h1>Admin Dashboard</h1>
             <p>Welcome, <?php echo $username; ?>!</p>
         </div>
 
         <a href="logout.php">Logout</a>
+
     </div>
 
     <h2>Website Overview</h2>
@@ -123,8 +138,32 @@ $username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_QUOTES,
 
     </div>
 
+    <h2 style="margin-top: 40px;">Content Management</h2>
+
     <div class="admin-actions">
-        <a href="../index.php">View Portfolio</a>
+
+        <a href="profile.php">Profile Management</a>
+
+        <a href="skills.php">Skills Management</a>
+
+        <a href="projects.php">Projects Management</a>
+
+        <a href="education.php">Education Management</a>
+
+        <a href="experience.php">Experience Management</a>
+
+        <a href="achievements.php">Achievements Management</a>
+
+        <a href="messages.php">Messages Management</a>
+
+        <a href="settings.php">Website Settings</a>
+
+    </div>
+
+    <div class="admin-actions">
+
+        <a href="../index.php" class="section-link">View Portfolio</a>
+
     </div>
 
 </div>
