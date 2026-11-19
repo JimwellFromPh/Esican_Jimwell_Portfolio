@@ -8,6 +8,18 @@ $profile = $stmt->fetch();
 if (!$profile) {
     die('Profile information not found.');
 }
+
+$settingsStmt = $pdo->query("SELECT * FROM settings LIMIT 1");
+$settings = $settingsStmt->fetch();
+
+$siteTitle = !empty($settings['site_title'])
+    ? $settings['site_title']
+    : $profile['full_name'] . ' | Home';
+
+$fullName = htmlspecialchars($profile['full_name'], ENT_QUOTES, 'UTF-8');
+$headline = htmlspecialchars($profile['headline'], ENT_QUOTES, 'UTF-8');
+$introduction = htmlspecialchars($profile['introduction'], ENT_QUOTES, 'UTF-8');
+$profileImage = htmlspecialchars($profile['profile_image'], ENT_QUOTES, 'UTF-8');
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +28,7 @@ if (!$profile) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><?= htmlspecialchars($profile['full_name'], ENT_QUOTES, 'UTF-8') ?> | Home</title>
+    <title><?= htmlspecialchars($siteTitle, ENT_QUOTES, 'UTF-8') ?></title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -70,18 +82,18 @@ if (!$profile) {
                 </p>
 
                 <h1>
-                    <?= htmlspecialchars($profile['full_name'], ENT_QUOTES, 'UTF-8') ?>
+                    <?= $fullName ?>
                 </h1>
 
                 <h2>
                     I am a
                     <span id="typing-text">
-                        <?= htmlspecialchars($profile['headline'], ENT_QUOTES, 'UTF-8') ?>
+                        <?= $headline ?>
                     </span>
                 </h2>
 
                 <p>
-                    <?= htmlspecialchars($profile['introduction'], ENT_QUOTES, 'UTF-8') ?>
+                    <?= $introduction ?>
                 </p>
 
                 <div class="hero-buttons">
@@ -101,7 +113,7 @@ if (!$profile) {
             <div class="profile-card">
 
                 <img
-                    src="<?= htmlspecialchars($profile['profile_image'], ENT_QUOTES, 'UTF-8') ?>"
+                    src="<?= $profileImage ?>"
                     alt="My Profile Picture"
                     class="profile-image">
 

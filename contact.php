@@ -6,6 +6,22 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Get profile information
+$profileStmt = $pdo->query("SELECT * FROM profile LIMIT 1");
+$profile = $profileStmt->fetch();
+
+if (!$profile) {
+    die('Profile information not found.');
+}
+
+// Get website settings
+$settingsStmt = $pdo->query("SELECT * FROM settings LIMIT 1");
+$settings = $settingsStmt->fetch();
+
+$siteTitle = !empty($settings['site_title'])
+    ? $settings['site_title']
+    : $profile['full_name'] . ' | Contact';
+
 // Create CSRF token
 if (empty($_SESSION['contact_csrf'])) {
     $_SESSION['contact_csrf'] = bin2hex(random_bytes(32));
@@ -92,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['last_contact_submission'] = time();
             $_SESSION['contact_success'] = 'Your message has been sent successfully!';
 
-            // Redirect to prevent duplicate submissions
             header('Location: contact.php');
             exit;
 
@@ -111,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Portfolio | Contact</title>
+    <title><?= htmlspecialchars($siteTitle, ENT_QUOTES, 'UTF-8') ?></title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -195,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div>
                         <h3>Email</h3>
                         <p>
-                            jimwellesican415@gmail.com
+                            <?= htmlspecialchars($profile['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>
                         </p>
                     </div>
 
@@ -210,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div>
                         <h3>Phone</h3>
                         <p>
-                            +63 961 905 6564
+                            <?= htmlspecialchars($profile['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?>
                         </p>
                     </div>
 
@@ -225,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div>
                         <h3>Location</h3>
                         <p>
-                            Bayawan City, Negros Oriental, Philippines
+                            <?= htmlspecialchars($profile['location'] ?? '', ENT_QUOTES, 'UTF-8') ?>
                         </p>
                     </div>
 
@@ -262,7 +277,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         name="csrf_token"
                         value="<?= htmlspecialchars($_SESSION['contact_csrf'], ENT_QUOTES, 'UTF-8') ?>">
 
-                    <!-- Hidden spam-trap field -->
                     <div style="position:absolute; left:-9999px;" aria-hidden="true">
                         <label for="website">Leave this field empty</label>
                         <input
