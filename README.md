@@ -1,5 +1,10 @@
 # Esican Jimwell Portfolio
 
+## Live Website
+
+Visit my portfolio:  
+https://jimwell-esican-portfolio.infinityfree.io
+
 ## About the Project
 
 This is a personal portfolio website developed using PHP, MySQL, HTML, CSS, and JavaScript. It showcases personal information, skills, education, projects, experience, and achievements.
@@ -50,13 +55,4 @@ The website also includes an admin dashboard where the website content can be ma
 4. Open phpMyAdmin.
 5. Create a database named `portfolio`.
 6. Import the `database/portfolio.sql` file.
-7. Configure your database connection in `includes/config.php` using the provided `includes/config.sample.php` as a guide.
-8. Open your browser and visit:
-
-   `http://localhost/Esican_Jimwell_Portfolio/`
-
-## Admin Access
-
-Admin login page:
-
-`http://localhost/Esican_Jim
+7. Configure your database connection in `includes/config.php` using the provided `
